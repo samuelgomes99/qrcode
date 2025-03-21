@@ -12,32 +12,32 @@ export default async function handler(req, res) {
 
   if (req.method === "GET") {
     try {
-      console.log(`📡 Buscando participante para o ticket: ${ticketId}`);
+      console.log(`Buscando participante para o ticket: ${ticketId}`);
 
       const response = await axios.get(`${API_URL}/${ticketId}/check-in`, {
         headers: { Authorization: `Bearer ${TOKEN}` },
       });
 
-      console.log("✅ Resposta da API Guru:", response.data);
+      console.log("Resposta da API:", response.data);
       return res.status(200).json(response.data);
     } catch (error) {
-      console.error("❌ Erro ao buscar participante:", error.response?.data || error.message);
+      console.error("Erro ao buscar participante:", error.response?.data || error.message);
       return res.status(error.response?.status || 500).json({ error: "Erro ao buscar participante" });
     }
   }
 
   if (req.method === "POST") {
     try {
-      console.log(`📡 Realizando check-in para o ticket: ${ticketId}`);
+      console.log(`Realizando check-in para o ticket: ${ticketId}`);
 
       await axios.post(`${API_URL}/${ticketId}/check-in`, {}, {
         headers: { Authorization: `Bearer ${TOKEN}` },
       });
 
-      console.log("✅ Check-in realizado com sucesso!");
+      console.log("Check-in realizado com sucesso!");
       return res.status(200).json({ message: "Check-in realizado com sucesso!" });
     } catch (error) {
-      console.error("❌ Erro no check-in:", error.response?.data || error.message);
+      console.error("Erro no check-in:", error.response?.data || error.message);
       return res.status(error.response?.status || 500).json({ error: "Erro ao realizar check-in" });
     }
   }
