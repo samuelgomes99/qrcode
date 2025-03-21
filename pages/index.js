@@ -11,6 +11,7 @@ export default function CheckInPage() {
   const [loading, setLoading] = useState(false);
   const [checkInSuccess, setCheckInSuccess] = useState(false);
   const [searchAttempted, setSearchAttempted] = useState(false); // Track if search was attempted
+  const [scannerError, setScannerError] = useState(false);
 
   const handleScan = async (data) => {
     if (data && data !== ticketId) {
@@ -19,6 +20,11 @@ export default function CheckInPage() {
       await fetchAndSetParticipant(data);
       setScanning(false);
     }
+  };
+
+  const handleScanError = (error) => {
+    console.error("Scanner error:", error);
+    setScannerError(true);
   };
 
   // Reset search attempted state when ticket ID changes
@@ -67,6 +73,7 @@ export default function CheckInPage() {
             padding: 0;
             background: #121212;
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen, Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
+            -webkit-tap-highlight-color: transparent;
           }
         `}</style>
       </Head>
@@ -82,17 +89,29 @@ export default function CheckInPage() {
           
           {scanning ? (
             <div className="mb-6 border border-dark-300 rounded-lg p-4 bg-dark-500">
-              <QrScanner onScan={handleScan} />
+              <QrScanner 
+                onScan={handleScan} 
+                onError={handleScanError} 
+              />
               <button
                 onClick={() => setScanning(false)}
                 className="mt-4 px-4 py-2 bg-dark-300 text-white rounded hover:bg-dark-200 transition-all text-sm"
               >
                 Cancelar
               </button>
+              
+              {scannerError && (
+                <div className="mt-3 p-2 bg-dark-600 rounded text-xs text-gray-400">
+                  Se tiver problemas com o scanner, digite o código do ticket manualmente.
+                </div>
+              )}
             </div>
           ) : (
             <button
-              onClick={() => setScanning(true)}
+              onClick={() => {
+                setScannerError(false);
+                setScanning(true);
+              }}
               className="w-full px-4 py-3 bg-primary-600 text-white font-medium rounded hover:bg-primary-700 transition-all shadow-md flex items-center justify-center"
             >
               <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
