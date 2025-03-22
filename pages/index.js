@@ -36,14 +36,18 @@ export default function CheckInPage() {
     if (!ticketId.trim()) return;
     
     setLoading(true);
-    setSearchAttempted(true); // Mark that a search was attempted
+    setSearchAttempted(true);
     setCheckInSuccess(false);
     console.log("Buscando participante para o ticket:", ticketId);
     const participantData = await fetchParticipantData(ticketId);
     console.log("Dados do participante recebidos:", participantData);
 
     if (participantData) {
-      setParticipant(participantData.attendee);
+      // Include product information in the participant data
+      setParticipant({
+        ...participantData.attendee,
+        product: participantData.product
+      });
     } else {
       console.warn("Nenhum participante encontrado para este ticket.");
       setParticipant(null);

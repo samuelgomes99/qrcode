@@ -24,6 +24,12 @@ export default function ParticipantInfo({ participant, onCheckIn, loading, succe
           <span className="text-gray-500 w-20">Telefone:</span>
           <span className="text-gray-300">{participant.phone_local_code} {participant.phone_number}</span>
         </div>
+        {participant.product && (
+          <div className="flex items-center">
+            <span className="text-gray-500 w-20">Produto:</span>
+            <span className="text-primary-400 flex-1 truncate font-medium">{participant.product.name}</span>
+          </div>
+        )}
       </div>
 
       {success ? (
